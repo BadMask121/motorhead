@@ -128,3 +128,6 @@ docker run --name motorhead -p 8080:8080 -e PORT=8080 -e REDIS_URL='redis://redi
 - [Chat JS Vanilla Example](examples/chat-vanilla-js/)
 - [Chat JS Vanilla Hosted Example](examples/chat-vanilla-js-hosted/)
 - [Chat Python Example](examples/chat-py/)
+
+
+[] Build migrate to using library instead of a service

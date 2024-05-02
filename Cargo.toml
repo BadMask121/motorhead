@@ -9,6 +9,7 @@ authors = ["Sergio Prada <metal@getmetal.io>"]
 
 [dependencies]
 actix-web = "4.3"
+anyhow = "1.0.82"
 async-openai = "0.11.0"
 async-trait = "0.1.68"
 byteorder = "1.4.3"
@@ -20,5 +21,7 @@ log = "0.4"
 nanoid = "0.4.0"
 redis = { version = "0.22", default-features = false, features = ["tokio-comp", "connection-manager"] }
 serde = { version = "1", features = ["derive"] }
+thiserror = "1.0.59"
 tiktoken-rs = "0.4.1"
 tokio = { version = "1", features = ["full"] }
+dotenvy = "0.15"
