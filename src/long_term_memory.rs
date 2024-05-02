@@ -37,6 +37,8 @@ pub async fn index_messages(
       .arg(&contents[index])
       .arg("role")
       .arg(&messages[index].role)
+      .arg("id")
+      .arg(&messages[index].id)
       .query_async::<_, ()>(&mut redis_conn)
       .await?;
   }

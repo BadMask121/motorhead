@@ -191,6 +191,7 @@ pub struct SearchPayload {
 pub struct MemoryMessage {
   pub role: String,
   pub content: String,
+  pub id: String,
 }
 
 #[derive(Deserialize)]
@@ -199,7 +200,7 @@ pub struct MemoryMessagesAndContext {
   pub context: Option<String>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct MemoryResponse {
   pub messages: Vec<MemoryMessage>,
   pub context: Option<String>,

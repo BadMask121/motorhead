@@ -144,19 +144,30 @@ impl MotorheadBuilder {
       .and_then(|tokens_string| tokens_string.parse::<i64>().ok())
       .unwrap_or(0);
 
-    let messages: Vec<MemoryMessage> = messages
+    let mut messages: Vec<MemoryMessage> = messages
       .into_iter()
       .filter_map(|message| {
         let mut parts = message.splitn(2, ": ");
+
         match (parts.next(), parts.next()) {
-          (Some(role), Some(content)) => Some(MemoryMessage {
-            role: role.to_string(),
-            content: content.to_string(),
-          }),
+          (Some(id_role), Some(content)) => {
+            let mut id_role_parts = id_role.splitn(2, ":");
+
+            match (id_role_parts.next(), id_role_parts.next()) {
+              (Some(id), Some(role)) => Some(MemoryMessage {
+                id: id.to_string(),
+                role: role.to_string(),
+                content: content.to_string(),
+              }),
+              _ => None,
+            }
+          }
           _ => None,
         }
       })
       .collect();
+
+    messages.reverse();
 
     let response = MemoryResponse {
       messages,
@@ -180,7 +191,12 @@ impl MotorheadBuilder {
     let messages: Vec<String> = memory_messages
       .messages
       .into_iter()
-      .map(|memory_message| format!("{}: {}", memory_message.role, memory_message.content))
+      .map(|memory_message| {
+        format!(
+          "{}:{}: {}",
+          memory_message.id, memory_message.role, memory_message.content
+        )
+      })
       .collect();
 
     // If new context is passed in we overwrite the existing one
