@@ -30,6 +30,8 @@ pub fn ensure_redisearch_index(
         .arg("TEXT")
         .arg("role")
         .arg("TEXT")
+        .arg("id")
+        .arg("NUMERIC")
         .arg("vector")
         .arg("VECTOR")
         .arg("HNSW")

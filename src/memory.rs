@@ -25,7 +25,7 @@ pub struct MotorheadBuilder {
   pub(crate) redis: redis::aio::ConnectionManager,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct MotorheadBuilderParam {
   pub long_term_memory: Option<bool>,
   pub window_size: Option<i64>,
@@ -131,7 +131,7 @@ impl MotorheadBuilder {
       .arg(0)
       .arg(self.window_size as isize)
       .cmd("MGET")
-      .arg(keys)
+      .arg(keys.clone())
       .query_async(&mut conn)
       .await
       .map_err(|e| MemoryError::MemoryRedisError(e.to_string()))?;
@@ -155,7 +155,7 @@ impl MotorheadBuilder {
 
             match (id_role_parts.next(), id_role_parts.next()) {
               (Some(id), Some(role)) => Some(MemoryMessage {
-                id: id.to_string(),
+                id: id.parse::<u64>().unwrap(),
                 role: role.to_string(),
                 content: content.to_string(),
               }),
@@ -166,8 +166,6 @@ impl MotorheadBuilder {
         }
       })
       .collect();
-
-    messages.reverse();
 
     let response = MemoryResponse {
       messages,

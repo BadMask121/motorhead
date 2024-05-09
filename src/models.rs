@@ -191,7 +191,7 @@ pub struct SearchPayload {
 pub struct MemoryMessage {
   pub role: String,
   pub content: String,
-  pub id: String,
+  pub id: u64,
 }
 
 #[derive(Deserialize)]
@@ -252,6 +252,7 @@ impl std::error::Error for MotorheadError {}
 pub struct RedisearchResult {
   pub role: String,
   pub content: String,
+  pub id: u64,
   pub dist: f64,
 }
 
@@ -261,11 +262,13 @@ impl FromRedisValue for RedisearchResult {
     let mut content = String::new();
     let mut role = String::new();
     let mut dist = 0.0;
+    let mut id = 0;
 
     for i in 0..values.len() {
       match values[i].as_str() {
         "content" => content = values[i + 1].clone(),
         "role" => role = values[i + 1].clone(),
+        "id" => id = values[i + 1].parse::<u64>().unwrap_or(0),
         "dist" => dist = values[i + 1].parse::<f64>().unwrap_or(0.0),
         _ => continue,
       }
@@ -274,6 +277,7 @@ impl FromRedisValue for RedisearchResult {
     Ok(RedisearchResult {
       role,
       content,
+      id,
       dist,
     })
   }
