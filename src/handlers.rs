@@ -95,7 +95,7 @@ pub async fn get_memory(
       let mut parts = message.splitn(2, ": ");
       match (parts.next(), parts.next(), parts.next()) {
         (Some(id), Some(role), Some(content)) => Some(MemoryMessage {
-          id: id.to_string(),
+          id: id.parse::<u64>().unwrap(),
           role: role.to_string(),
           content: content.to_string(),
         }),
